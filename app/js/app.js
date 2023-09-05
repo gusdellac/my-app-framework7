@@ -10,6 +10,10 @@ var app = new Framework7({
             path: "/home/",
             url: "index.html",
         },
+        {
+            path: "/usuario/",
+            url: "usuarios.html",
+        }
     ],
 });
 

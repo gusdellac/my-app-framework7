@@ -1,0 +1,104 @@
+<div class="page" data-name="usuarios">
+        
+    <!-- BARRA SUPERIOR -->
+    <div class="navbar">
+        <div class="navbar-inner topbar">
+            <div class="topbar-title">F7 app</div>
+        </div>
+    </div>
+
+    <!-- BARRA DE HERRAMIENTAS -->
+    <div class="toolbar toolbar-bottom">
+        <div class="toolbar-inner">
+            <a href="/home/" class="link"><i class="f7-icons icon-toolbar-properties">house</i></a>
+            <a href="" class="link"><i class="f7-icons icon-toolbar-properties">photo_fill_on_rectangle_fill</i></a>
+            <a href="" class="link"><i class="f7-icons icon-toolbar-properties">person_fill</i></a>
+        </div>
+    </div>
+
+    <!-- INFORMACION DE LA APP -->
+    <div class="page-content">
+        <div class="block">
+            <form class="list list-strong-ios list-dividers-ios list-outline-ios" id="my-form">
+                <ul>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Nombre</div>
+                                <div class="item-input-wrap">
+                                    <input type="text" name="name" placeholder="Nombre y apellido" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">E-mail</div>
+                                <div class="item-input-wrap">
+                                    <input type="email" name="email" placeholder="E-mail" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">Genero</div>
+                                <div class="item-input-wrap">
+                                    <select name="gender">
+                                        <option value="male" selected="selected">Masculino</option>
+                                        <option value="female">Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">Toggle</div>
+                                <div class="item-after">
+                                    <label class="toggle toggle-init">
+                                        <input type="checkbox" name="toggle" value="yes" /><i class="toggle-icon"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+            <div class="block block-strong grid grid-cols-2 grid-gap">
+                <div class="botones-formulario">
+                    <a class="button button-fill convert-form-to-data" href="#">Get Data</a>
+                    <a class="button button-fill fill-form-from-data" href="#">Fill Form</a>
+                </div>
+            </div>
+        </div>
+        <img src="" alt="">
+    </div>
+
+</div>
+
+<!-- <script>
+    export default (props, { $, $on, $f7 }) => {
+      $on('pageInit', () => {
+        $('.convert-form-to-data').on('click', function () {
+          var formData = $f7.form.convertToData('#my-form');
+          alert(JSON.stringify(formData));
+        });
+  
+        $('.fill-form-from-data').on('click', function () {
+          var formData = {
+            'name': 'John',
+            'email': 'john@doe.com',
+            'gender': 'female',
+            'toggle': ['yes'],
+          }
+          $f7.form.fillFromData('#my-form', formData);
+        });
+      });
+  
+      return $render;
+    }
+</script> -->

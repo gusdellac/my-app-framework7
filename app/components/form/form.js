@@ -1,11 +1,12 @@
-import $ from 'dom7';
-import { window, document } from 'ssr-window';
-import Utils from '../../utils/utils';
+import { getWindow, getDocument } from 'ssr-window';
+import $ from '../../shared/dom7.js';
+import { extend, serializeObject } from '../../shared/utils.js';
 
 // Form Data
 const FormData = {
   store(form, data) {
     const app = this;
+    const window = getWindow();
     let formId = form;
 
     const $formEl = $(form);
@@ -16,14 +17,11 @@ const FormData = {
     app.form.data[`form-${formId}`] = data;
 
     // Store form data in local storage also
-    try {
-      window.localStorage[`f7form-${formId}`] = JSON.stringify(data);
-    } catch (e) {
-      throw e;
-    }
+    window.localStorage[`f7form-${formId}`] = JSON.stringify(data);
   },
   get(form) {
     const app = this;
+    const window = getWindow();
     let formId = form;
 
     const $formEl = $(form);
@@ -31,12 +29,8 @@ const FormData = {
       formId = $formEl.attr('id');
     }
 
-    try {
-      if (window.localStorage[`f7form-${formId}`]) {
-        return JSON.parse(window.localStorage[`f7form-${formId}`]);
-      }
-    } catch (e) {
-      throw e;
+    if (window.localStorage[`f7form-${formId}`]) {
+      return JSON.parse(window.localStorage[`f7form-${formId}`]);
     }
     if (app.form.data[`form-${formId}`]) {
       return app.form.data[`form-${formId}`];
@@ -45,6 +39,7 @@ const FormData = {
   },
   remove(form) {
     const app = this;
+    const window = getWindow();
     let formId = form;
 
     const $formEl = $(form);
@@ -59,13 +54,9 @@ const FormData = {
     }
 
     // Delete form data from local storage also
-    try {
-      if (window.localStorage[`f7form-${formId}`]) {
-        window.localStorage[`f7form-${formId}`] = '';
-        window.localStorage.removeItem(`f7form-${formId}`);
-      }
-    } catch (e) {
-      throw e;
+    if (window.localStorage[`f7form-${formId}`]) {
+      window.localStorage[`f7form-${formId}`] = '';
+      window.localStorage.removeItem(`f7form-${formId}`);
     }
   },
 };
@@ -108,7 +99,7 @@ function formToData(formEl) {
   // Skip input types
   const skipTypes = ['submit', 'image', 'button', 'file'];
   const skipNames = [];
-  $formEl.find('input, select, textarea').each((inputIndex, inputEl) => {
+  $formEl.find('input, select, textarea').each((inputEl) => {
     const $inputEl = $(inputEl);
     if ($inputEl.hasClass('ignore-store-data') || $inputEl.hasClass('no-store-data')) {
       return;
@@ -121,7 +112,7 @@ function formToData(formEl) {
     if (tag === 'select' && $inputEl.prop('multiple')) {
       skipNames.push(name);
       data[name] = [];
-      $formEl.find(`select[name="${name}"] option`).each((index, el) => {
+      $formEl.find(`select[name="${name}"] option`).each((el) => {
         if (el.selected) data[name].push(el.value);
       });
     } else {
@@ -129,13 +120,13 @@ function formToData(formEl) {
         case 'checkbox':
           skipNames.push(name);
           data[name] = [];
-          $formEl.find(`input[name="${name}"]`).each((index, el) => {
+          $formEl.find(`input[name="${name}"]`).each((el) => {
             if (el.checked) data[name].push(el.value);
           });
           break;
         case 'radio':
           skipNames.push(name);
-          $formEl.find(`input[name="${name}"]`).each((index, el) => {
+          $formEl.find(`input[name="${name}"]`).each((el) => {
             if (el.checked) data[name] = el.value;
           });
           break;
@@ -168,7 +159,7 @@ function formFromData(formEl, formData) {
   const skipTypes = ['submit', 'image', 'button', 'file'];
   const skipNames = [];
 
-  $formEl.find('input, select, textarea').each((inputIndex, inputEl) => {
+  $formEl.find('input, select, textarea').each((inputEl) => {
     const $inputEl = $(inputEl);
     if ($inputEl.hasClass('ignore-store-data') || $inputEl.hasClass('no-store-data')) {
       return;
@@ -181,7 +172,7 @@ function formFromData(formEl, formData) {
     if (skipNames.indexOf(name) >= 0 || !name) return;
     if (tag === 'select' && $inputEl.prop('multiple')) {
       skipNames.push(name);
-      $formEl.find(`select[name="${name}"] option`).each((index, el) => {
+      $formEl.find(`select[name="${name}"] option`).each((el) => {
         const selectEl = el;
         if (data[name].indexOf(el.value) >= 0) selectEl.selected = true;
         else selectEl.selected = false;
@@ -190,7 +181,7 @@ function formFromData(formEl, formData) {
       switch (type) {
         case 'checkbox':
           skipNames.push(name);
-          $formEl.find(`input[name="${name}"]`).each((index, el) => {
+          $formEl.find(`input[name="${name}"]`).each((el) => {
             const checkboxEl = el;
             if (data[name].indexOf(el.value) >= 0) checkboxEl.checked = true;
             else checkboxEl.checked = false;
@@ -198,7 +189,7 @@ function formFromData(formEl, formData) {
           break;
         case 'radio':
           skipNames.push(name);
-          $formEl.find(`input[name="${name}"]`).each((index, el) => {
+          $formEl.find(`input[name="${name}"]`).each((el) => {
             const radioEl = el;
             if (data[name] === el.value) radioEl.checked = true;
             else radioEl.checked = false;
@@ -219,6 +210,8 @@ function formFromData(formEl, formData) {
 
 function initAjaxForm() {
   const app = this;
+  const window = getWindow();
+  const document = getDocument();
 
   function onSubmitChange(e, fromData) {
     const $formEl = $(this);
@@ -228,53 +221,65 @@ function initAjaxForm() {
     if (e.type === 'change' && fromData === 'fromdata') return;
 
     const method = ($formEl.attr('method') || 'GET').toUpperCase();
-    const contentType = $formEl.prop('enctype') || $formEl.attr('enctype');
+    const contentType = $formEl.attr('enctype') || $formEl.prop('enctype');
 
-    const url = $formEl.attr('action');
+    let url = $formEl.attr('action');
     if (!url) return;
 
     let data;
     if (method === 'POST') {
-      if (contentType === 'application/x-www-form-urlencoded') {
+      if (
+        contentType === 'application/x-www-form-urlencoded' ||
+        contentType === 'application/json'
+      ) {
         data = app.form.convertToData($formEl[0]);
+        if (contentType === 'application/json') {
+          data = JSON.stringify(data);
+        }
       } else {
         data = new window.FormData($formEl[0]);
       }
     } else {
-      data = Utils.serializeObject(app.form.convertToData($formEl[0]));
+      data = serializeObject(app.form.convertToData($formEl[0]));
+      if (url.includes('?')) {
+        url += `&${data}`;
+      } else {
+        url += `?${data}`;
+      }
     }
 
-    app.request({
+    $formEl.trigger('formajax:beforesend', { data });
+    app.emit('formAjaxBeforeSend', $formEl[0], data);
+
+    fetch(url, {
       method,
-      url,
-      contentType,
-      data,
-      beforeSend(xhr) {
-        $formEl.trigger('formajax:beforesend', { data, xhr });
-        app.emit('formAjaxBeforeSend', $formEl[0], data, xhr);
-      },
-      error(xhr) {
-        $formEl.trigger('formajax:error', { data, xhr });
-        app.emit('formAjaxError', $formEl[0], data, xhr);
-      },
-      complete(xhr) {
-        $formEl.trigger('formajax:complete', { data, xhr });
-        app.emit('formAjaxComplete', $formEl[0], data, xhr);
-      },
-      success(response, status, xhr) {
-        $formEl.trigger('formajax:success', { data, xhr });
-        app.emit('formAjaxSuccess', $formEl[0], data, xhr);
-      },
-    });
+      headers: { 'Content-Type': contentType || 'application/x-www-form-urlencoded' },
+      ...(method === 'POST' || method === 'PUT' ? { body: data } : {}),
+    })
+      .then((response) => {
+        $formEl.trigger('formajax:complete', { data, response });
+        app.emit('formAjaxComplete', $formEl[0], data, response);
+
+        $formEl.trigger('formajax:success', { data, response });
+        app.emit('formAjaxSuccess', $formEl[0], data, response);
+      })
+      .catch((error) => {
+        $formEl.trigger('formajax:error', { data, error });
+        app.emit('formAjaxError', $formEl[0], data, error);
+      });
   }
-  $(document).on('submit change', 'form.form-ajax-submit, form.form-ajax-submit-onchange', onSubmitChange);
+  $(document).on(
+    'submit change',
+    'form.form-ajax-submit, form.form-ajax-submit-onchange',
+    onSubmitChange,
+  );
 }
 
 export default {
   name: 'form',
   create() {
     const app = this;
-    Utils.extend(app, {
+    extend(app, {
       form: {
         data: {},
         storeFormData: FormData.store.bind(app),
@@ -296,25 +301,29 @@ export default {
     },
     tabBeforeRemove(tabEl) {
       const app = this;
-      $(tabEl).find('.form-store-data').each((index, formEl) => {
-        app.form.storage.destroy(formEl);
-      });
+      $(tabEl)
+        .find('.form-store-data')
+        .each((formEl) => {
+          app.form.storage.destroy(formEl);
+        });
     },
     tabMounted(tabEl) {
       const app = this;
-      $(tabEl).find('.form-store-data').each((index, formEl) => {
-        app.form.storage.init(formEl);
-      });
+      $(tabEl)
+        .find('.form-store-data')
+        .each((formEl) => {
+          app.form.storage.init(formEl);
+        });
     },
     pageBeforeRemove(page) {
       const app = this;
-      page.$el.find('.form-store-data').each((index, formEl) => {
+      page.$el.find('.form-store-data').each((formEl) => {
         app.form.storage.destroy(formEl);
       });
     },
     pageInit(page) {
       const app = this;
-      page.$el.find('.form-store-data').each((index, formEl) => {
+      page.$el.find('.form-store-data').each((formEl) => {
         app.form.storage.init(formEl);
       });
     },

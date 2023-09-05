@@ -4,13 +4,14 @@
 
 .topbar{
     background: white;
-    justify-content: center !important;
+    justify-content: space-between !important;
 }
 
 .topbar-title{
     font-size: 24px;
     font-weight: 600;
     color: #212121;
+    padding: 0 16px;
 }
 
 .principal{
@@ -44,7 +45,25 @@
     margin: 5px 0;
 }
 
+.icon-topbar-properties{
+    font-size: 28px;
+    color: rgb(147, 59, 59);
+    padding: 0 16px;
+}
+
 .icon-toolbar-properties{
     font-size: 25px;
     color: rgb(147, 59, 59);
+}
+
+.botones-formulario{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.botones-formulario a{
+    width: 120px;
 }
