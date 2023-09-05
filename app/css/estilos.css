@@ -1,0 +1,50 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.topbar{
+    background: white;
+    justify-content: center !important;
+}
+
+.topbar-title{
+    font-size: 24px;
+    font-weight: 600;
+    color: #212121;
+}
+
+.principal{
+    background: #212121;
+    margin: 0 !important;
+}
+.first-title{
+    font-size: 20px;
+    font-weight: 300;
+    color: rgb(186, 186, 186);
+    text-align: center;
+    padding: 5px;
+}
+
+.second-title{
+    font-size: 14px;
+    font-weight: 300;
+    text-align: center;
+    color: rgb(186, 186, 186);
+    margin-top: 0;
+}
+
+.background-img{
+    background-image: url(../images/two-wine-glasses-in-toasting-gesture-with-big-splashing-at-studio.jpg);
+    height: 100vh;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 12px;
+    margin: 5px 0;
+}
+
+.icon-toolbar-properties{
+    font-size: 25px;
+    color: rgb(147, 59, 59);
+}
