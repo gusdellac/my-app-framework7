@@ -19,6 +19,17 @@
 </head>
 <body>
     <div id="app">
+        <div class="panel panel-left panel-reveal panel-resizable panel-properties">
+            <div class="block">
+                <div class="list links-list list-outline-ios list-strong-ios list-dividers-ios">
+                    <ul class="panel-list-properties">
+                      <li class="panel-list-properties-item"><a href="/home/" class="panel-close">Home</a></li>
+                      <li class="panel-list-properties-item"><a href="/galeria/" class="panel-close">Galeria</a></li>
+                      <li class="panel-list-properties-item"><a href="/usuario/" class="panel-close">Usuario</a></li>
+                    </ul>
+                  </div>
+            </div>
+        </div>
         <div class="statusbar"></div>
         <div class="view view-main">
             <div class="page" data-name="home">
@@ -38,8 +49,8 @@
                 <!-- BARRA DE HERRAMIENTAS -->
                 <div class="toolbar toolbar-bottom">
                     <div class="toolbar-inner">
-                        <a href="" class="link"><i class="f7-icons icon-toolbar-properties">house</i></a>
-                        <a href="" class="link"><i class="f7-icons icon-toolbar-properties">photo_fill_on_rectangle_fill</i></a>
+                        <a href="#" class="link"><i class="f7-icons icon-toolbar-properties">house</i></a>
+                        <a href="/galeria/" class="link"><i class="f7-icons icon-toolbar-properties">photo_fill_on_rectangle_fill</i></a>
                         <a href="/usuario/" class="link"><i class="f7-icons icon-toolbar-properties">person_fill</i></a>
                     </div>
                 </div>
@@ -51,9 +62,20 @@
                             <h2 class="first-title">Wines Trace</h2>
                             <p class="second-title">Lorem ipsum dolor sit amet consectetur.</p>
                             <div class="background-img"></div>
+                            <!-- <hr> -->
+                            <!-- <a class="link popup-open" href="#" data-popup=".popup-inicial">Open Popup</a> -->
                         </section>
                     </div>
-                    <img src="" alt="">
+                </div>
+
+                <div class="popup popup-inicial">
+                    <!-- <a href="link" class="popup-close">Cerrar</a> -->
+                    <div class="caja-container">
+                        <div class="caja-imagen"><img src="https://picsum.photos/800/800?image=222" alt=""></div>
+                    </div>
+                    <!-- <div class="block">
+                        
+                    </div> -->
                 </div>
         
             </div>

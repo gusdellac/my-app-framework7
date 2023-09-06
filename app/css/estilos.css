@@ -2,6 +2,21 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.panel-properties{
+    background-color: #212121;
+}
+
+.panel-list-properties{
+    background-color: #212121 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.panel-list-properties-item{
+    background-color: rgb(220, 220, 220);
+    border-radius: 10px;
+}
+
 .topbar{
     background: white;
     justify-content: space-between !important;
@@ -12,6 +27,10 @@
     font-weight: 600;
     color: #212121;
     padding: 0 16px;
+}
+
+.icono-back{
+    padding: 0 !important;
 }
 
 .principal{
@@ -66,4 +85,20 @@
 
 .botones-formulario a{
     width: 120px;
+}
+
+.caja-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+.caja-imagen{
+    width: 80%;
+}
+
+.caja-imagen img{
+    width: 100%;
+    border-radius: 50%;
 }
